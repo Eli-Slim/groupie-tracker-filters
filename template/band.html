@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
+    <title>groupie trackers - {{.Artist.Name}}</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/normalize.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/static/js/utils.js" defer></script>
+    <script src="/static/js/map.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <header id="header">
+        <h1 class="logo">
+          <a href="/">GROUPIE <span>TRACKER</span></a>
+        </h1>
+        <input
+          type="text"
+          class="search-input"
+          name="search"
+          placeholder="search for a brand"
+        />
+      </header>
+
+      <main class="team-content" data-id="{{.Artist.Id}}">
+        <aside class="team-info">
+          <img src="{{.Artist.Image}}" alt="" />
+          <h2 class="title">Creation Date</h2>
+          <span class="creation-date">{{.Artist.CreationDate}}</span>
+          <h2 class="title">First Album</h2>
+          <span class="creation-date">{{.Artist.FirstAlbum}}</span>
+          <h2 class="title">Member</h2>
+          <ul class="list">
+            {{range .Artist.Membres}}
+            <li>{{.}}</li>
+            {{end}}
+          </ul>
+        </aside>
+        <div class="concert-dates">
+          <h2 class="title">concert dates</h2>
+          <div class="concert-dates-list">
+            {{range $key, $value := .Relation.DatesLocations}}
+            <div class="concert-date">
+              <h2 class="location">{{FixLocation $key}}</h2>
+              <div class="dates-list">
+                {{range $value}}
+                <span class="date-item">{{.}}</span>
+                {{end}}
+              </div>
+            </div>
+            {{end}}
+          </div>
+          </div>
+          </main>
+            <div class="map-content">
+              <div id="map"></div>
+            </div>
+      
+    </div>
+    <footer id="footer">
+      Made with ❤️ by <a href="https://github.com/eli-Slim">aesslima</a>,
+      <a href="https://github.com/hamzaboutaleb">hboutale</a> &
+      <a href="https://github.com/4mr4n11">kelamrani</a>.
+    </footer>
+  </body>
+</html>
