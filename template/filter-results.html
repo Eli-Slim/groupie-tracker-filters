@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
+    <title>Groupie Trackers</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/normalize.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header id="header">
+        <h1 class="logo">
+          <a href="/">GROUPIE <span>TRACKER</span></a>
+        </h1>
+        <input
+          type="text"
+          class="search-input"
+          name="search"
+          placeholder="search for a brand"
+        />
+      </header>
+
+      <main id="main">
+        <h3 class="title">All Bands:</h3>
+        <div class="card-list">
+          {{range .}}
+          <div class="card">
+            <a href="band/{{.Id}}">
+              <div class="image">
+                <img src="{{.Image}}" alt="queen" />
+              </div>
+            </a>
+            <footer>
+              <a href="band/{{.Id}}">
+                <h2>{{.Name}}</h2>
+              </a>
+              <span>{{.CreationDate}}</span>
+            </footer>
+          </div>
+          {{end}}
+        </div>
+      </main>
+      <footer id="footer">
+        Made with ❤️ by <a href="https://github.com/eli-Slim">aesslima</a>,
+        <a href="https://github.com/hamzaboutaleb">hboutale</a> &
+        <a href="https://github.com/4mr4n11">kelamrani</a>.
+      </footer>
+    </div>
+  </body>
+</html>

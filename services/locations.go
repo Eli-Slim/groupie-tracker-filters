@@ -16,13 +16,13 @@ func fetchLocations() ([]byte, error) {
 }
 
 func GetLocations() ([]models.Locations, error) {
-	var locations []models.Locations
+	var location []models.Locations
 	artistsData, err := fetchLocations()
 	if err != nil {
-		return locations, err
+		return location, err
 	}
-	json.Unmarshal(artistsData, &locations)
-	return locations, nil
+	json.Unmarshal(artistsData, &location)
+	return location, nil
 }
 
 func GetLocationById(id string) (models.Locations, error) {
