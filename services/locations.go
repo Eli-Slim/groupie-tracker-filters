@@ -15,8 +15,8 @@ func fetchLocations() ([]byte, error) {
 	return utils.FetchGroupieTracker("locations")
 }
 
-func GetLocations() ([]models.Locations, error) {
-	var location []models.Locations
+func GetLocations() (models.Index, error) {
+	var location models.Index
 	artistsData, err := fetchLocations()
 	if err != nil {
 		return location, err

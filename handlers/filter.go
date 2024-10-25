@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -12,103 +10,75 @@ import (
 	"groupietracker/utils"
 )
 
-func FilterByCreationDate(creationDateMin, creationDateMax string, ids map[int]bool, w http.ResponseWriter, artists []models.Artist) {
+func FilterByCreationDate(creationDateMin, creationDateMax string, artist models.Artist) (bool, error) {
+	found := false
 	min, err := strconv.Atoi(creationDateMin)
 	if err != nil || min < 1900 {
-		utils.RenderError(w, http.StatusBadRequest, "Bad Request")
-		return
+		return found, err
 	}
 	max, err := strconv.Atoi(creationDateMax)
 	if err != nil || max < 1900 || min > max {
-		utils.RenderError(w, http.StatusBadRequest, "Bad Request")
-		return
+		return found, err
 	}
-	for _, artist := range artists {
-		if artist.CreationDate >= min && artist.CreationDate <= max {
-			ids[artist.Id] = true
-		}
+	if artist.CreationDate >= min && artist.CreationDate <= max {
+		found = true
 	}
+	return found, nil
 }
 
-func FilterByFirstAlbumDate(day, month, year string, ids map[int]bool, w http.ResponseWriter, artists []models.Artist) {
-	Day, err := strconv.Atoi(day)
-	if err != nil || Day < 1 || Day > 31 {
-		utils.RenderError(w, http.StatusBadRequest, "Bad Request")
-		return
+func FilterByFirstAlbumDate(FirstAlbumDateMin, FirstAlbumDateMax string, artist models.Artist) (bool, error) {
+	found := false
+	min, err := strconv.Atoi(FirstAlbumDateMin)
+	if err != nil || min < 1900 {
+		return found, err
 	}
-	if Day >= 1 && Day <= 9 {
-		day = "0" + day
+	max, err := strconv.Atoi(FirstAlbumDateMax)
+	if err != nil || max < 1900 || min > max {
+		return found, err
 	}
-	Month, err := strconv.Atoi(month)
-	if err != nil || Month < 1 || Month > 12 {
-		utils.RenderError(w, http.StatusBadRequest, "Bad Request")
-		return
+	FirstAlbumDate := strings.Split(artist.FirstAlbum, "-")[2]
+	FirstAlbumDateInt, err := strconv.Atoi(FirstAlbumDate)
+	if err != nil {
+		return found, err
 	}
-	if Month >= 1 && Month <= 9 {
-		month = "0" + month
+	if FirstAlbumDateInt >= min && FirstAlbumDateInt <= max {
+		found = true
 	}
-	Year, err := strconv.Atoi(year)
-	if err != nil || Year < 1900 || Year > 2024 {
-		utils.RenderError(w, http.StatusBadRequest, "Bad Request")
-		return
-	}
-	date := []string{day, month, year}
-	firstAlbumDate := strings.Join(date, "-")
-	for _, artist := range artists {
-		if artist.FirstAlbum == firstAlbumDate {
-			ids[artist.Id] = true
-		}
-	}
+	return found, nil
 }
 
-func FilterByMembers(members []string, ids map[int]bool, w http.ResponseWriter, artists []models.Artist) {
+func FilterByMembers(members []string, artist models.Artist) (bool, error) {
+	found := false
 	membersNbr := []int{}
 	for _, c := range members {
 		member, err := strconv.Atoi(string(c))
 		if err != nil || member < 1 {
-			utils.RenderError(w, http.StatusBadRequest, "Bad Request")
-			return
+			return found, err
 		}
 		membersNbr = append(membersNbr, member)
 	}
-	for _, artist := range artists {
-		for _, members := range membersNbr {
-			if len(artist.Membres) == members {
-				ids[artist.Id] = true
-			}
+	for _, members := range membersNbr {
+		if len(artist.Membres) == members {
+			found = true
+			break
 		}
 	}
+	return found, nil
 }
 
-func FilterByLocation(location string, ids map[int]bool, w http.ResponseWriter, locations []models.Locations, artists []models.Artist) {
-	Id := []int{}
-	for _, local := range locations {
-		for _, l := range local.Locations {
-			l1 := strings.ToLower(l)
-			l2 := strings.ToLower(location)
-			if strings.Contains(l1, l2) {
-				Id = append(Id, local.Id)
-			}
+func FilterByLocation(location string, locations models.Locations) bool{
+	found := false
+	for _, local := range locations.Locations {
+		l1 := strings.ToLower(local)
+		l2 := strings.ToLower(location)
+		l2 = strings.ReplaceAll(l2, ", ", "-")
+		l2 = strings.ReplaceAll(l2, " ", "_")
+		if strings.Contains(l1, l2) {
+			found = true
+			break
 		}
 	}
-	for _, artist := range artists {
-		for _, id := range Id {
-			if artist.Id == id {
-				ids[artist.Id] = true
-			}
-		}
-	}
-
-}
-
-func getLocations(url string) ([]models.Locations, error) {
-	var artist []models.Locations
-	artistsData, err := utils.Fetch(url)
-	if err != nil {
-		return artist, err
-	}
-	json.Unmarshal(artistsData, &artist)
-	return artist, nil
+	return found
 }
 
 func Filter(w http.ResponseWriter, r *http.Request) {
@@ -128,38 +98,59 @@ func Filter(w http.ResponseWriter, r *http.Request) {
 		utils.RenderError(w, http.StatusBadRequest, "Bad Request")
 		return
 	}
-	ids := make(map[int]bool)
 	results := []models.Artist{}
-	creationDateMin := r.PostFormValue("creationDateMin")
-	creationDateMax := r.PostFormValue("creationDateMax")
-	if len(creationDateMin) != 0 && len(creationDateMax) != 0 {
-		FilterByCreationDate(creationDateMin, creationDateMax, ids, w, artists)
-	}
-	day := r.PostFormValue("day")
-	month := r.PostFormValue("month")
-	year := r.PostFormValue("year")
-	if len(day) != 0 && len(month) != 0 && len(year) != 0 {
-		FilterByFirstAlbumDate(day, month, year, ids, w, artists)
-	}
-	members := r.Form["members"]
-	if len(members) != 0 {
-		FilterByMembers(members, ids, w, artists)
-	}
-	location := r.PostFormValue("location")
-	if len(location) != 0 {
-		locations, err := getLocations("https://groupietrackers.herokuapp.com/api/locations")
-		if err != nil {
-			utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
-			return
-		}
-		fmt.Println(locations)
-		FilterByLocation(location, ids, w, locations, artists)
-	}
 	for _, artist := range artists {
-		if _, exist := ids[artist.Id]; exist {
-			results = append(results, artist)
+		creationDateMin := r.PostFormValue("creationDateMin")
+		creationDateMax := r.PostFormValue("creationDateMax")
+		if len(creationDateMin) != 0 && len(creationDateMax) != 0 {
+			flag, err := FilterByCreationDate(creationDateMin, creationDateMax, artist)
+			if err != nil {
+				utils.RenderError(w, http.StatusBadRequest, "Bad Request")
+				return
+			}
+			if !flag {
+				continue
+			}
 		}
+		FirstAlbumDateMin := r.PostFormValue("FirstAlbumDateMin")
+		FirstAlbumDateMax := r.PostFormValue("FirstAlbumDateMax")
+		if len(FirstAlbumDateMin) != 0 && len(FirstAlbumDateMax) != 0 {
+			flag, err := FilterByFirstAlbumDate(FirstAlbumDateMin, FirstAlbumDateMax, artist)
+			if err != nil {
+				utils.RenderError(w, http.StatusBadRequest, "Bad Request")
+				return
+			}
+			if !flag {
+				continue
+			}
+		}
+		members := r.Form["members"]
+		if len(members) != 0 {
+			flag, err := FilterByMembers(members, artist)
+			if err != nil {
+				utils.RenderError(w, http.StatusBadRequest, "Bad Request")
+				return
+			}
+			if !flag {
+				continue
+			}
+		}
+		location := r.PostFormValue("location")
+		if len(location) != 0 {
+			id := strconv.Itoa(artist.Id)
+			locations, err := services.GetLocationById(id)
+			if err != nil {
+				utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
+				return
+			}
+			flag := FilterByLocation(location, locations)
+			if !flag {
+				continue
+			}
+		}
+		results = append(results, artist)
 	}
+
 	temp, err := utils.ParseTemplate("filter-results.html")
 	if err != nil {
 		utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")

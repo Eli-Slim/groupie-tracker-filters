@@ -5,3 +5,7 @@ type Locations struct {
 	Locations []string `json:"locations"`
 	Date      string   `json:"dates"`
 }
+
+type Index struct {
+	Locations []Locations `json:"index"`
+}

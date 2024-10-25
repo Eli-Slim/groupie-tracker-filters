@@ -1,131 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
-    <title>Groupie Trackers</title>
-    <link rel="stylesheet" href="/static/css/style.css" />
-    <link rel="stylesheet" href="/static/css/normalize.css" />
-  </head>
-  <body>
-    <div class="container">
-      <header id="header">
-        <h1 class="logo">
-          <a href="/">GROUPIE <span>TRACKER</span></a>
-        </h1>
-        <input
-          type="text"
-          class="search-input"
-          name="search"
-          placeholder="search for a brand"
-        />
-      </header>
 
-      <main id="main">
-        <h3 class="title">Filters:</h3>
-        <div class="filter-side-bar">
-  
-          <!-- Form that will send the filters to the backend via POST -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
+  <title>Groupie Trackers</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/normalize.css" />
+  <script defer src="/static/js/Buttons.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <header id="header">
+      <h1 class="logo">
+        <a href="/">GROUPIE <span>TRACKER</span></a>
+      </h1>
+      <div class="flex">
+        <div class="filter-disply">
+          <div id="filter">FILTERS</div>
+        </div>
+        <input type="text" class="search-input" name="search" placeholder="search for a brand" />
+      </div>
+     
+    </header>
+
+    <main id="main">
+
+      <div class="container-filter">
+
+        <div class="filters">
+          <span id="back"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#ef5a6f"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg></span>
           <form method="POST" action="/filter-results">
-        
-            <!-- Range Filter (Creation Year) -->
             <div>
               <label for="CreationDate">Creation Date:</label>
               <br>
-              <input type="number" id="creationDateMin" name="creationDateMin" placeholder="Min Year" min="1900" max="2024" />
-              <input type="number" id="creationDateMax" name="creationDateMax" placeholder="Max Year" min="1900" max="2024" />
+              <input type="number" id="creationDateMin" name="creationDateMin" placeholder="Min Year" min="1900"
+                max="2024" />
+              <input type="number" id="creationDateMax" name="creationDateMax" placeholder="Max Year" min="1900"
+                max="2024" />
             </div>
-  
+
             <br>
-  
-            <!-- Range Filter (first album date) -->
+
             <div>
-              <label for="firstAlbumDate">First Album Date:</label>
+              <label for="CreationDate">First Album Date:</label>
               <br>
-              <label for="day">Day:</label>
-              <input type="number" id="day" name="day" min="1" max="31" placeholder="DD"/>
-              
-              <label for="month">Month:</label>
-              <input type="number" id="month" name="month" min="1" max="12" placeholder="MM"/>
-              
-              <label for="year">Year:</label>
-              <input type="number" id="year" name="year" min="1900" max="2100" placeholder="YYYY"/>
+              <input type="number" id="FirstAlbumDateMin" name="FirstAlbumDateMin" placeholder="Min Year" min="1900"
+                max="2024" />
+              <input type="number" id="FirstAlbumDateMax" name="FirstAlbumDateMax" placeholder="Max Year" min="1900"
+                max="2024" />
             </div>
-  
+
             <br>
-  
-            <!-- Checkbox Filter (Genres) -->
+
             <div>
               <label>Filter by Members:</label>
-              <div>
-                <label for="1">1</label>
-                <input type="checkbox" id="1" name="members" value="1" checked/>
-              </div>
-              <div>
+              <br><br>
+               <label for="1">1</label>
+                <input type="checkbox" id="1" name="members" value="1" />
                 <label for="2">2</label>
                 <input type="checkbox" id="2" name="members" value="2" />
-              </div>
-              <div>
+
                 <label for="3">3</label>
                 <input type="checkbox" id="3" name="members" value="3" />
-              </div>
-              <div>
+      
+  
                 <label for="4">4</label>
                 <input type="checkbox" id="4" name="members" value="4" />
-              </div>
-              <div>
+     
+     
                 <label for="5">5</label>
                 <input type="checkbox" id="5" name="members" value="5" />
-              </div>
-              <div>
+
+
                 <label for="6">6</label>
                 <input type="checkbox" id="6" name="members" value="6" />
-              </div>
-              <div>
+
+       
                 <label for="7">7</label>
                 <input type="checkbox" id="7" name="members" value="7" />
-              </div>
-              <div>
+
+
                 <label for="8">8</label>
                 <input type="checkbox" id="8" name="members" value="8" />
-              </div>
+ 
             </div>
-  
-             <!-- Location Filter -->
-             <label for="locationInput">Locations of Concerts:</label>
-             <input
-               type="text" id="locationInput" name="location" placeholder="Location of Concert" maxlength="30"/>
             <br>
-  
-            <!-- Submit Button -->
+            <label for="locationInput">Locations of Concerts:</label>
+            <input type="text" id="locationInput" name="location" placeholder="Location of Concert" maxlength="30" />
+            <br>
+
             <button type="submit">Filter Bands</button>
           </form>
+
         </div>
-        <h3 class="title">All Bands:</h3>
-        <div class="card-list">
-          {{range .}}
-          <div class="card">
+
+      </div>
+      <h3 class="title">All Bands:</h3>
+      <div class="card-list">
+        {{range .}}
+        <div class="card">
+          <a href="band/{{.Id}}">
+            <div class="image">
+              <img src="{{.Image}}" alt="queen" />
+            </div>
+          </a>
+          <footer>
             <a href="band/{{.Id}}">
-              <div class="image">
-                <img src="{{.Image}}" alt="queen" />
-              </div>
+              <h2>{{.Name}}</h2>
             </a>
-            <footer>
-              <a href="band/{{.Id}}">
-                <h2>{{.Name}}</h2>
-              </a>
-              <span>{{.CreationDate}}</span>
-            </footer>
-          </div>
-          {{end}}
+            <span>{{.CreationDate}}</span>
+          </footer>
         </div>
-      </main>
-      <footer id="footer">
-        Made with ❤️ by <a href="https://github.com/eli-Slim">aesslima</a>,
-        <a href="https://github.com/hamzaboutaleb">hboutale</a> &
-        <a href="https://github.com/4mr4n11">kelamrani</a>.
-      </footer>
-    </div>
-  </body>
+        {{end}}
+      </div>
+    </main>
+    <footer id="footer">
+      Made with ❤️ by <a href="https://github.com/eli-Slim">aesslima</a>,
+      <a href="https://github.com/hamzaboutaleb">hboutale</a> &
+      <a href="https://github.com/4mr4n11">kelamrani</a>.
+    </footer>
+  </div>
+</body>
+
 </html>

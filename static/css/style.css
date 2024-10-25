@@ -147,6 +147,103 @@ body {
   }
 }
 
+/*filtres.css*/
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.filter-disply div{
+  display: inline-block;
+  padding: 12px 16px;
+  background-color: #ef5a6f;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+  letter-spacing: 1px;
+}
+#filter {
+  opacity: 1;
+  background-color: #ef5a6f;
+  color: white;
+  cursor: pointer;
+}
+.container-filter {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: #7a757544;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.filters {
+  width: 60%;
+  max-width: 500px;
+  max-height: 60vh;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: visibility 0s linear 0.3s, opacity 0.3s, transform 0.3s;
+  position: absolute;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.filters input[type="number"],
+.filters input[type="text"] {
+  width: calc(50% - 5px);
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.filters input[type="text"] {
+  width: 100%;
+}
+
+.filters input:focus {
+  border-color: #ef5a6f;
+}
+.filters button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color:#ef5a6f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.2s linear;
+  letter-spacing: 1px;
+  gap: 10px;
+}
+
+.filters button[type="submit"]:hover {
+  opacity: 0.8;
+  transform: scale(1.02); 
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .filters {
+      width: 95%;
+      padding: 15px;
+  }
+  
+  .filters input[type="number"] {
+      width: 100%;
+      margin: 5px 0;
+  }
+}
 /* ARTIST PAGE */
 
 .team-content {
