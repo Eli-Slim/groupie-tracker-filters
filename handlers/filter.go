@@ -58,7 +58,7 @@ func FilterByMembers(members []string, artist models.Artist) (bool, error) {
 		membersNbr = append(membersNbr, member)
 	}
 	for _, members := range membersNbr {
-		if len(artist.Membres) == members {
+		if len(artist.Members) == members {
 			found = true
 			break
 		}
@@ -74,6 +74,9 @@ func FilterByLocation(location string, locations models.Locations) bool{
 		l2 = strings.ReplaceAll(l2, ", ", "-")
 		l2 = strings.ReplaceAll(l2, " ", "_")
 		if strings.Contains(l1, l2) {
+			found = true
+			break
+		}else if strings.Contains(l2, l1) {
 			found = true
 			break
 		}
@@ -92,7 +95,11 @@ func Filter(w http.ResponseWriter, r *http.Request) {
 		utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
-
+	locations, err := services.GetLocations()
+	if err != nil {
+		utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
+		return
+	}
 	erro := r.ParseForm()
 	if erro != nil {
 		utils.RenderError(w, http.StatusBadRequest, "Bad Request")
@@ -137,27 +144,25 @@ func Filter(w http.ResponseWriter, r *http.Request) {
 		}
 		location := r.PostFormValue("location")
 		if len(location) != 0 {
-			id := strconv.Itoa(artist.Id)
-			locations, err := services.GetLocationById(id)
-			if err != nil {
-				utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
-				return
-			}
-			flag := FilterByLocation(location, locations)
+			artistLocations := locations[artist.Id-1]
+			flag := FilterByLocation(location, artistLocations)
 			if !flag {
 				continue
 			}
 		}
 		results = append(results, artist)
 	}
-
-	temp, err := utils.ParseTemplate("filter-results.html")
+	if len(results) == 0 {
+		utils.RenderError(w, http.StatusNotFound, "NO RESULTS FOUND")
+			return
+	}
+	temp, err := utils.ParseTemplate("header.html", "filters.html", "results.html")
 	if err != nil {
 		utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
 
-	err = temp.Execute(w, results)
+	err = temp.ExecuteTemplate(w, "results.html", results)
 	if err != nil {
 		utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
 		return

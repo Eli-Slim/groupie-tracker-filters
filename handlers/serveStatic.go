@@ -9,7 +9,7 @@ import (
 
 func ServeStatic(w http.ResponseWriter, r *http.Request) {
 	d, err := os.Stat("." + r.URL.Path)
-	if d == nil || os.IsNotExist(err) || (d != nil && d.IsDir()) {
+	if d == nil || os.IsNotExist(err) || d.IsDir() {
 		utils.RenderError(w, http.StatusUnauthorized, "Page Unauthorized")
 		return
 	}

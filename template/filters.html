@@ -1,0 +1,73 @@
+{{define "filters"}}
+<div class="container-filters">
+
+  <div class="filters">
+    <span id="back"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px"
+        fill="#ef5a6f">
+        <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+      </svg></span>
+    <form method="POST" action="/filters">
+      <div>
+        <label for="CreationDate">CREATION DATE</label>
+        <br>
+        <input type="number" id="creationDateMin" name="creationDateMin" placeholder="Min Year" min="1900" max="2024"/>
+        <input type="number" id="creationDateMax" name="creationDateMax" placeholder="Max Year" min="1900" max="2024"/>
+      </div>
+
+      <br>
+
+      <div>
+        <label for="CreationDate">FIRST ALBUM DATE</label>
+        <br>
+        <input type="number" id="FirstAlbumDateMin" name="FirstAlbumDateMin" placeholder="Min Year" min="1900"
+          max="2024" />
+        <input type="number" id="FirstAlbumDateMax" name="FirstAlbumDateMax" placeholder="Max Year" min="1900"
+          max="2024" />
+      </div>
+
+      <br>
+
+      <div>
+        <label>NUMBER OF MEMBERS</label>
+        <br><br>
+        <label for="1">1</label>
+        <input type="checkbox" id="1" name="members" value="1" />
+        <label for="2">2</label>
+        <input type="checkbox" id="2" name="members" value="2" />
+
+        <label for="3">3</label>
+        <input type="checkbox" id="3" name="members" value="3" />
+
+
+        <label for="4">4</label>
+        <input type="checkbox" id="4" name="members" value="4" />
+
+
+        <label for="5">5</label>
+        <input type="checkbox" id="5" name="members" value="5" />
+
+
+        <label for="6">6</label>
+        <input type="checkbox" id="6" name="members" value="6" />
+
+
+        <label for="7">7</label>
+        <input type="checkbox" id="7" name="members" value="7" />
+
+
+        <label for="8">8</label>
+        <input type="checkbox" id="8" name="members" value="8" />
+
+      </div>
+      <br>
+      <label for="locationInput">LOCATIONS OF CONCERTS</label>
+      <input type="text" id="locationInput" name="location" placeholder="Location of Concert" maxlength="30" />
+      <br>
+
+      <button type="submit">FILTER BANDS</button>
+    </form>
+
+  </div>
+
+</div>
+{{end}}

@@ -28,7 +28,7 @@ func Band(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if artist.Id == 0 {
-		utils.RenderError(w, http.StatusNotFound, "Band not found")
+		utils.RenderError(w, http.StatusNotFound, "BAND NOT FOUND")
 		return
 	}
 
@@ -41,15 +41,15 @@ func Band(w http.ResponseWriter, r *http.Request) {
 	pageData.Artist = artist
 	pageData.Relation = relation
 
-	temp, err := utils.ParseTemplate("band.html")
+	temp, err := utils.ParseTemplate("header.html", "filters.html", "band.html")
 	if err != nil {
 		utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
 
-	err = temp.Execute(w, pageData)
+	err = temp.ExecuteTemplate(w, "band.html", pageData)
 	if err != nil {
-		utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error hahaha")
+		utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
 }

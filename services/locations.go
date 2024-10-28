@@ -15,14 +15,14 @@ func fetchLocations() ([]byte, error) {
 	return utils.FetchGroupieTracker("locations")
 }
 
-func GetLocations() (models.Index, error) {
-	var location models.Index
-	artistsData, err := fetchLocations()
+func GetLocations() ([]models.Locations, error) {
+	var index models.Index
+	locationsData, err := fetchLocations()
 	if err != nil {
-		return location, err
+		return index.Locations, err
 	}
-	json.Unmarshal(artistsData, &location)
-	return location, nil
+	json.Unmarshal(locationsData, &index)
+	return index.Locations, nil
 }
 
 func GetLocationById(id string) (models.Locations, error) {

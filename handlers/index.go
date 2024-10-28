@@ -22,14 +22,14 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
-	
-	tmp, err := utils.ParseTemplate("index.html")
+
+	tmp, err := utils.ParseTemplate("header.html", "filters.html", "index.html")
 	if err != nil {
 		utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
-	
-	err = tmp.Execute(w, artists)
+
+	err = tmp.ExecuteTemplate(w, "index.html", artists)
 	if err != nil {
 		utils.RenderError(w, http.StatusInternalServerError, "Internal Server Error")
 		return

@@ -4,8 +4,11 @@ import (
 	"html/template"
 )
 
-func ParseTemplate(filename string) (*template.Template, error) {
-	temp := template.New(filename)
+func ParseTemplate(filename ...string) (*template.Template, error) {
+	temp := template.New("")
 	temp.Funcs(FuncMap)
-	return temp.ParseFiles("./template/" + filename)
+	for i, file := range filename {
+		filename[i] = "./template/" + file
+	}
+	return temp.ParseFiles(filename...)
 }

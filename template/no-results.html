@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/normalize.css" />
+    <title>Ooooops!!</title>
+  </head>
+  <body>
+    <div class="container">
+      {{template "header"}}
+      <main class="error-main">
+        {{template "filters"}}
+        <div class="content">
+          <h1>Oooooooops!!</h1>
+          <h1>{{.Message}}</h1>
+        </div>
+      </main>
+      <footer id="footer">
+        Made with ❤️ by
+        <a href="https://github.com/eli-Slim" target="_blank">aesslima</a>,
+        <a href="https://github.com/hamzaboutaleb" target="_blank">hboutale</a>
+        & <a href="https://github.com/4mr4n11" target="_blank">kelamrani</a>.
+        <script src="/static/js/suggestion.js"></script>
+        <script src="/static/js/button.js"></script>
+      </footer>
+    </div>
+  </body>
+</html>

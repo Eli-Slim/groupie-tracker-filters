@@ -1,5 +1,5 @@
-const HiddenLayer = document.getElementsByClassName("container-filter")[0]
-const filter = document.getElementById("filter")
+const HiddenLayer = document.getElementsByClassName("container-filters")[0]
+const filter = document.getElementById("filters")
 const Back = document.getElementById("back")
 
 document.body.addEventListener("click" , (e)=> {
